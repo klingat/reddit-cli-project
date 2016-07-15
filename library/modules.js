@@ -161,19 +161,19 @@ function getSubreddits(callback) {
 //   }
 // })
 
-// function getPost (permalink, callback) {
-//   var getPostURL = "https://www.reddit.com"+ permalink +".json";
-//   requestAsJson(getPostURL, function(err, res) {
+function getPost (permalink, callback) {
+  var getPostURL = "https://www.reddit.com"+ permalink +".json";
+  requestAsJson(getPostURL, function(err, res) {
 
-//     if (err) {
-//       callback (err);
-//     }
-//     else {
-//       var response = res[1].data.children; // we pick the first object ([0]) because the 2dn object is the comments
-//       callback(null, response);
-//     }
-//   });
-// }
+    if (err) {
+      callback (err);
+    }
+    else {
+      var response = res[1].data.children; // we pick the first object ([0]) because the 2dn object is the comments
+      callback(null, response);
+    }
+  });
+}
 
 
 // getPost("/r/Jokes/comments/4st4cc/did_you_hear_that_auschwitz_had_to_ask_visitors/", function (err, res) {
@@ -185,17 +185,17 @@ function getSubreddits(callback) {
 //   }
 // });
 
-function getComments(item) {
-    item.forEach(function(comm) {
-        if(comm.data.body){
-            console.log(comm.data.body);
-            counter++;
-        }
-        if (comm.data.replies) {
-            getComments(comm.data.replies.data.children)
-        }
-    })
-}
+// function getComments(item) {
+//     item.forEach(function(comm) {
+//         if(comm.data.body){
+//             console.log(comm.data.body);
+//             counter++;
+//         }
+//         if (comm.data.replies) {
+//             getComments(comm.data.replies.data.children)
+//         }
+//     })
+// }
 
 
 // Export the API
@@ -205,5 +205,6 @@ module.exports = {
   getSubreddit: getSubreddit,
   getSortedSubreddit: getSortedSubreddit,
   getSubreddits: getSubreddits,
-  getComments: getComments
+  // getComments: getComments,
+  getPost: getPost
 };
