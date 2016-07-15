@@ -1,3 +1,4 @@
+//NPM modules:
 var modules = require("./library/modules.js");
 var inquirer = require("inquirer");
 var prompt = require("prompt");
@@ -5,13 +6,18 @@ var colour = require('colour');
 var clear = require('clear');
 var imageToAscii = require("image-to-ascii");
 
-var seperator = (colour.yellow("___________________________________________"));
+// Program variables to use:
+var counter = 0;
+var seperator = (colour.yellow("======================================================"));
 
 var menuChoices = [
-  {name: 'Show homepage', value: "HOMEPAGE"},
-  {name: 'Enter subreddit', value: "SUBREDDIT"},
-  {name: 'List subreddits', value: "SUBREDDITS"}
+  {name: ('Show homepage').bold, value: "HOMEPAGE"},
+  {name: ('Enter subreddit').bold, value: "SUBREDDIT"},
+  {name: ('List subreddits').bold, value: "SUBREDDITS"}
 ];
+
+
+
 
 
 function userInput() {
@@ -78,7 +84,7 @@ function userInput() {
           else {
             var listSubreddits = res.map(function(item) {
               return {
-                name: item.data.title,
+                name: (item.data.title).magenta.bold,
                 value: item.data.display_name
               };
 
@@ -101,6 +107,8 @@ function userInput() {
                       console.log("Votes: " + (colour.green(item.data.score)));
                       console.log("By " + item.data.author);
                       console.log("Link to post: " + (colour.blue(item.data.url)));
+                      
+                      
 
 
                     });
@@ -110,8 +118,8 @@ function userInput() {
 // Bring user back to main menu:
 
                     var choicesReturn = [
-                      {name: "Return to main menu", value: "YES"},
-                      {name: "Select posts to view", value: "NO"}
+                      {name: ("Return to main menu").bold, value: "YES"},
+                      {name: ("Select posts to view").bold, value: "NO"}
                       ];
                       inquirer.prompt({
                           type: 'list',
@@ -138,7 +146,7 @@ function userInput() {
                                   
                                   var choicePosts = res.map(function(item) {
                                     return {
-                                      name: item.data.title,
+                                      name: item.data.title.magenta.bold,
                                       value: item
                                     }
                                   })
@@ -155,17 +163,24 @@ function userInput() {
                                     function(choice) {
                                       clear(); 
                                       if (choice.menu.data.preview) {
-                                        console.log("Hi there!");
-                                        // console.log((choice.data.url).indexOf("i"));
                                         
                                         if ((choice.menu.data.url).includes("imgur") === true && (choice.menu.data.url).includes("jpg") === false && (choice.menu.data.url).includes("png") === false && (choice.menu.data.url).includes("gif") === false) {
                                 
                                           var urlImgur = choice.menu.data.url + ".jpg"; // be able to display imgur links that dont end in .jpeg
                                           imageToAscii(urlImgur, (err, converted) => {
                                             console.log(err || converted);
+                                            console.log((choice.menu.data.title).bold.magenta);
                                             console.log("Posted by " + choice.menu.data.author);
                                             console.log("Link to post: " + colour.blue(choice.menu.data.url));
-                                            console.log(seperator);
+                                            
+                                            console.log("THIS IS THE CHOICE" + choice);
+                                            
+                                            modules.getComments(choice);
+/* over here! */                            console.log(counter);
+
+                                            console.log(seperator);  
+                                            
+                                            
                                             userInput();
                                           });
                                         }
@@ -173,24 +188,39 @@ function userInput() {
                                           var url = choice.menu.data.url;
                                           imageToAscii(url, (err, converted) => {
                                             console.log(err || converted);
+                                            console.log((choice.menu.data.title).bold.magenta);
                                             console.log("Posted by " + choice.menu.data.author);
                                             console.log("Link to post: " + colour.blue(choice.menu.data.url));
+                                            
+                                            
+                                            modules.getComments(choice);
+/* over here! */                            console.log(counter);
+                                            
                                             console.log(seperator);
+                                            
                                             userInput();
                                           });
-                                
                                         }
                                       }
                                       else {
                                         console.log(choice.menu.data.selftext);
+                                        console.log((choice.menu.data.title).bold.magenta);
                                         console.log("Posted by " + choice.menu.data.author);
                                         console.log("Link to post: " + colour.blue(choice.menu.data.url));
+                                        
+                                        
+                                        modules.getComments(choice);
+/* over here! */                        console.log(counter);
+                                        
+                                        
                                         console.log(seperator);
+                                        
+                                        
                                         userInput();
                                       }
                                 }
                                 );
-                              })
+                              });
                         }
                       }
                     );
